@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To My Farincikina 🤍</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts for Elegant Typography -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Background Music Controller -->
+    <div class="music-player" id="musicPlayer">
+        <button class="music-btn" id="musicToggle" aria-label="Toggle Music">
+            <span class="music-icon">🎵</span>
+            <span class="music-text">Play Our Song</span>
+        </button>
+        <!-- Replace the src URL with your direct audio link (MP3 hosted on GitHub, Dropbox, etc.) -->
+        <audio id="bgMusic" loop src="https://soundhelix.com"></audio>
+    </div>
+
+    <!-- Floating Canvas Particles -->
+    <canvas id="heartCanvas"></canvas>
+
+    <!-- Main Container for CSS Scroll Snapping -->
+    <div class="scroll-container">
+
+        <!-- Section 1: Hero Welcome -->
+        <section class="panel" id="hero">
+            <div class="content">
+                <div class="rose-icon">🌹</div>
+                <h1>To My Farincikina</h1>
+                <p class="subtitle">A celebration of your beautiful milestone.</p>
+                <div class="scroll-indicator">Scroll down, my love ↓</div>
+            </div>
+        </section>
+
+        <!-- Section 2: Celebration Theme -->
+        <section class="panel" id="celebration">
+            <div class="content">
+                <h2>🎓 First Semester Down</h2>
+                <p class="message-text">
+                    Watching you navigate this first semester has been an absolute honor. Your dedication, your resilience, and your brilliant mind shine so incredibly bright. This is just the opening chapter of your success, and I am so deeply proud to stand by your side through it all.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: Photo Gallery -->
+        <section class="panel" id="gallery">
+            <div class="content">
+                <h2>📸 Captured Moments</h2>
+                <p class="gallery-sub">Hover or tap to reveal the warmth in my heart.</p>
+                <div class="grid">
+                    <!-- Card 1 with photo1.jpg -->
+                    <div class="card-wrapper">
+                        <div class="card">
+                            <img src="photo1.jpg" alt="Memory One">
+                        </div>
+                        <span class="card-caption">Your Beautiful Smile</span>
+                    </div>
+                    <!-- Card 2 with photo2.jpg -->
+                    <div class="card-wrapper">
+                        <div class="card">
+                            <img src="photo2.jpg" alt="Memory Two">
+                        </div>
+                        <span class="card-caption">My Favorite Day</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Final Emotional Reveal & Polish -->
+        <section class="panel" id="reveal">
+            <div class="content">
+                <div class="heart-lock" id="lockIcon">🔒</div>
+                <div class="hidden-content" id="finalMessage">
+                    <h2 class="cinzel-title">My Whole Heart</h2>
+                    <p class="message-text intense">
+                        You are my peace, my endless joy, and the brightest light in my life. No matter where this journey takes us, my heart rests completely with you.
+                    </p>
+                    <div class="devotion-seal">
+                        <p class="signature">I love you, Farincikina.</p>
+                        <span class="forever">🤍 Always & Forever ❤️</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Script for Canvas Particles, Music, and Emotional Reveal Reveal -->
+    <script>
+        // Audio Toggle Setup
+        const audio = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const musicText = musicToggle.querySelector('.music-text');
+        
+        musicToggle.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().catch(err => console.log("Audio play blocked by browser policies"));
+                musicText.innerText = "Playing Our Song";
+                musicToggle.classList.add('playing');
+            } else {
+                audio.pause();
+                musicText.innerText = "Play Our Song";
+                musicToggle.classList.remove('playing');
+            }
+        });
+
+        // Emotional Reveal Interaction
+        const lockIcon = document.getElementById('lockIcon');
+        const finalMessage = document.getElementById('finalMessage');
+
+        lockIcon.addEventListener('click', () => {
+            lockIcon.style.transform = 'scale(0) rotate(360deg)';
+            lockIcon.style.opacity = '0';
+            setTimeout(() => {
+                lockIcon.style.display = 'none';
+                finalMessage.classList.add('visible');
+            }, 600);
+        });
+
+        // Canvas Floating Hearts Animation Engine
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class HeartParticle {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * canvas.height;
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 8 + 4;
+                this.speedY = Math.random() * 0.8 + 0.3;
+                this.speedX = Math.sin(Math.random() * 2) * 0.3;
+                this.opacity = Math.random() * 0.4 + 0.1;
+            }
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                if (this.y < -20) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`; // Cream/gold soft tint
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 40; i++) {
+            particles.push(new HeartParticle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
